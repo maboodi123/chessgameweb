@@ -1,0 +1,37 @@
+#board {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid black;
+}
+
+.square {
+  width: 50px;
+  height: 50px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.light {
+  background-color: #f0d9b5;
+}
+
+.dark {
+  background-color: #b58863;
+}
+
+/* Style for images within squares */
+#board img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+  opacity: 0.7; /* Adjust opacity as needed */
+}
+
+/* Style for selected squares */
+.square.selected {
+  background-color: yellow; /* Or any other color you prefer */
+}
