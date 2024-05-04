@@ -218,7 +218,7 @@ function isValidMoveForPiece(pieceType, startRow, startCol, endRow, endCol, boar
   }
   return false;
 }
-
+let currentPlayer = 'white';
 $('.square').click(function() {
   let square = $(this);
   let row = square.data('row');
@@ -271,7 +271,7 @@ $('.square').click(function() {
       // Update the board state data model
       boardState[row][col] = boardState[startRow][startCol];
       boardState[startRow][startCol] = null;
-
+      currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
       // ... (add logic for turn-based system, check detection, etc.) ...
     } else {
       // ... (invalid move feedback) ...
@@ -286,7 +286,7 @@ $('.square').click(function() {
   } else {
     // Check if the clicked square contains a piece
     let piece = square.find('img');
-    if (piece.length > 0) {
+    if (piece.length > 0 && piece.attr('alt').includes(currentPlayer)) {
       // Remove highlighting from any previously selected square
       if (selectedSquare) {
         selectedSquare.removeClass('selected');
