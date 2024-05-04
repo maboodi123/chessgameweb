@@ -286,7 +286,7 @@ $('.square').click(function() {
   } else {
     // Check if the clicked square contains a piece
     let piece = square.find('img');
-    if (piece.length > 0 && piece.attr('alt').includes(currentPlayer)) {
+    if (piece.length > 0  && piece.attr('alt').includes(currentPlayer)) {
       // Remove highlighting from any previously selected square
       if (selectedSquare) {
         selectedSquare.removeClass('selected');
