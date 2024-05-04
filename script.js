@@ -1,7 +1,7 @@
 $(document).ready(function() {
   // Function to add a piece to the board
   function addPiece(pieceName, row, col) {
-    let imgPath = 'images/' + pieceName + '.png';
+    let imgPath =  pieceName + '.png';
     $('#board .square[data-row="' + row + '"][data-col="' + col + '"]').append(`<img src="${imgPath}" alt="${pieceName}">`);
   }
 
