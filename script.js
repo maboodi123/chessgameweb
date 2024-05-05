@@ -218,6 +218,20 @@ function isValidMoveForPiece(pieceType, startRow, startCol, endRow, endCol, boar
   }
   return false;
 }
+  function highlightPossibleMoves(pieceType, startRow, startCol) {
+    // Clear previous highlights
+    $('.square').removeClass('possible-move');
+
+    // Iterate over the board and check valid moves for each square
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        if (isValidMoveForPiece(pieceType, startRow, startCol, r, c)) {
+          // Highlight the square as a possible move
+          $(`.square[data-row="${r}"][data-col="${c}"]`).addClass('possible-move');
+        }
+      }
+    }
+  }
 let currentPlayer = 'white';
 $('.square').click(function() {
   let square = $(this);
@@ -288,6 +302,9 @@ $('.square').click(function() {
     let piece = square.find('img');
     if (piece.length > 0  && piece.attr('alt').includes(currentPlayer)) {
       // Remove highlighting from any previously selected square
+       let pieceType = piece.attr('alt');
+        highlightPossibleMoves(pieceType, row, col);
+
       if (selectedSquare) {
         selectedSquare.removeClass('selected');
       }
