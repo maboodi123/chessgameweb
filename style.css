@@ -35,3 +35,8 @@
 .square.selected {
   background-color: yellow; /* Or any other color you prefer */
 }
+
+/* Style for possible move squares */
+.square.possible-move {
+  background-color: rgba(0, 255, 0, 0.5); /* Green with transparency */
+}

@@ -121,30 +121,33 @@ function isValidMoveForPawn(startRow, startCol, endRow, endCol) {
   }
 
   // Function to check valid moves for a bishop
-  function isValidMoveForBishop(startRow, startCol, endRow, endCol) {
-    if (Math.abs(startRow - endRow) === Math.abs(startCol - endCol)) {
-      const rowDirection = Math.sign(endRow - startRow);
-      const colDirection = Math.sign(endCol - startCol);
+ function isValidMoveForBishop(startRow, startCol, endRow, endCol) {
+  // Check if the move is diagonal (same number of squares moved horizontally and vertically)
+  if (Math.abs(startRow - endRow) === Math.abs(startCol - endCol)) {
+    // Determine the direction of movement (up/down, left/right)
+    const rowDirection = Math.sign(endRow - startRow);
+    const colDirection = Math.sign(endCol - startCol);
 
-      let currentRow = startRow + rowDirection;
-      let currentCol = startCol + colDirection;
-      while (currentRow !== endRow && currentCol !== endCol) {
-        if (boardState[currentRow][currentCol]) {
-          return false; // Obstacle found
-        }
-        currentRow += rowDirection;
-        currentCol += colDirection;
+    // Check for obstacles along the diagonal path
+    let currentRow = startRow + rowDirection;
+    let currentCol = startCol + colDirection;
+    while (currentRow !== endRow && currentCol !== endCol) {
+      if (boardState[currentRow][currentCol]) {
+        return false; // Obstacle found
       }
-
-      const targetPiece = boardState[endRow][endCol];
-      if (!targetPiece || (targetPiece.includes('black') !== boardState[startRow][startCol].includes('black'))) {
-        return true;
-      }
+      currentRow += rowDirection;
+      currentCol += colDirection;
     }
 
-    return false;
+    // Check if the destination square is empty or occupied by an opponent's piece
+    const targetPiece = boardState[endRow][endCol];
+    if (!targetPiece || (targetPiece.includes('black') !== boardState[startRow][startCol].includes('black'))) {
+      return true; // Valid move
+    }
   }
 
+  return false; // Not a valid diagonal move
+}
   // Function to check valid moves for a queen
   function isValidMoveForQueen(startRow, startCol, endRow, endCol) {
     return isValidMoveForRook(startRow, startCol, endRow, endCol) || isValidMoveForBishop(startRow, startCol, endRow, endCol);
@@ -214,9 +217,21 @@ function isValidMoveForPiece(pieceType, startRow, startCol, endRow, endCol, boar
     case 'rookblack':
     case 'rookwhite':
       return isValidMoveForRook(startRow, startCol, endRow, endCol);
-    // ... (add cases for other piece types) ...
+    case 'knightblack':
+    case 'knightwhite':
+      return isValidMoveForKnight(startRow, startCol, endRow, endCol);
+    case 'bishopblack':
+    case 'bishopwhite':
+      return isValidMoveForBishop(startRow, startCol, endRow, endCol);
+    case 'queenblack':
+    case 'queenwhite':
+      return isValidMoveForQueen(startRow, startCol, endRow, endCol);
+    case 'kingblack':
+    case 'kingwhite':
+      return isValidMoveForKing(startRow, startCol, endRow, endCol);
+    default:
+      return false; // Invalid piece type
   }
-  return false;
 }
   function highlightPossibleMoves(pieceType, startRow, startCol) {
     // Clear previous highlights
@@ -286,6 +301,8 @@ $('.square').click(function() {
       boardState[row][col] = boardState[startRow][startCol];
       boardState[startRow][startCol] = null;
       currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+      $('.square').removeClass('possible-move');
+
       // ... (add logic for turn-based system, check detection, etc.) ...
     } else {
       // ... (invalid move feedback) ...
@@ -300,11 +317,8 @@ $('.square').click(function() {
   } else {
     // Check if the clicked square contains a piece
     let piece = square.find('img');
-    if (piece.length > 0  && piece.attr('alt').includes(currentPlayer)) {
+   if (piece.length > 0 && piece.attr('alt').includes(currentPlayer)) {
       // Remove highlighting from any previously selected square
-       let pieceType = piece.attr('alt');
-        highlightPossibleMoves(pieceType, row, col);
-
       if (selectedSquare) {
         selectedSquare.removeClass('selected');
       }
@@ -313,6 +327,10 @@ $('.square').click(function() {
       selectedPiece = piece;
       selectedSquare = square;
       square.addClass('selected');
+
+      // Highlight possible moves for the selected piece
+      let pieceType = piece.attr('alt');
+      highlightPossibleMoves(pieceType, row, col);
     }
   }
 });
