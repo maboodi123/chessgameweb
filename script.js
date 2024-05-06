@@ -11,7 +11,7 @@ $(document).ready(function() {
       let color = (i + j) % 2 === 0 ? 'light' : 'dark';
       $('#board').append(`<div class="square ${color}" data-row="${i}" data-col="${j}"></div>`);
     }
-  }
+   }
 
   // Data Model (2D Array)
   let boardState = [
